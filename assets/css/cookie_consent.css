@@ -1,0 +1,489 @@
+/**
+ * Cookie Consent Styles
+ * 
+ * This stylesheet uses CSS custom properties (variables) for easy theming.
+ * Override these variables in your app's CSS to match your design system.
+ */
+
+/* ============================================
+   Z-INDEX FIX FOR COMMON CONFLICTS
+   ============================================ */
+
+/* Fix conflict with Phoenix LiveView's topbar progress indicator */
+canvas[style*="z-index: 100001"] {
+  z-index: 9998 !important;
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   Override these in your app to customize
+   ============================================ */
+
+:root {
+  /* Banner positioning */
+  --cookie-banner-z-index: 9999;
+  
+  /* Spacing */
+  --cookie-spacing-xs: 0.25rem;
+  --cookie-spacing-sm: 0.5rem;
+  --cookie-spacing-md: 1rem;
+  --cookie-spacing-lg: 1.5rem;
+  --cookie-spacing-xl: 2rem;
+  
+  /* Border radius */
+  --cookie-border-radius-sm: 0.375rem;
+  --cookie-border-radius-md: 0.5rem;
+  --cookie-border-radius-lg: 0.75rem;
+  --cookie-border-radius-full: 9999px;
+  
+  /* Font sizes */
+  --cookie-font-size-xs: 0.75rem;
+  --cookie-font-size-sm: 0.875rem;
+  --cookie-font-size-base: 1rem;
+  --cookie-font-size-lg: 1.125rem;
+  --cookie-font-size-xl: 1.25rem;
+  
+  /* Font weights */
+  --cookie-font-weight-normal: 400;
+  --cookie-font-weight-semibold: 600;
+  --cookie-font-weight-bold: 700;
+  
+  /* Transitions */
+  --cookie-transition-fast: 150ms ease-in-out;
+  --cookie-transition-normal: 200ms ease-in-out;
+  
+  /* Shadows */
+  --cookie-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --cookie-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --cookie-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark theme colors (default) */
+.cookie-consent-theme-dark {
+  --cookie-bg-banner: #1e293b;
+  --cookie-bg-modal: #1e293b;
+  --cookie-bg-category: rgba(51, 65, 85, 0.5);
+  --cookie-bg-backdrop: rgba(0, 0, 0, 0.7);
+  
+  --cookie-border-banner: #334155;
+  --cookie-border-modal: #334155;
+  --cookie-border-input: #475569;
+  
+  --cookie-text-primary: #ffffff;
+  --cookie-text-secondary: #cbd5e1;
+  --cookie-text-muted: #94a3b8;
+  
+  --cookie-btn-primary-bg: #3b82f6;
+  --cookie-btn-primary-bg-hover: #2563eb;
+  --cookie-btn-primary-text: #ffffff;
+  
+  --cookie-btn-secondary-bg: transparent;
+  --cookie-btn-secondary-bg-hover: rgba(255, 255, 255, 0.05);
+  --cookie-btn-secondary-text: #cbd5e1;
+  --cookie-btn-secondary-text-hover: #ffffff;
+  --cookie-btn-secondary-border: #475569;
+  --cookie-btn-secondary-border-hover: #64748b;
+  
+  --cookie-toggle-bg: #475569;
+  --cookie-toggle-bg-checked: #3b82f6;
+  --cookie-toggle-slider: #ffffff;
+  
+  --cookie-badge-success-bg: #059669;
+  --cookie-badge-success-text: #ffffff;
+}
+
+/* Light theme colors */
+.cookie-consent-theme-light {
+  --cookie-bg-banner: #ffffff;
+  --cookie-bg-modal: #ffffff;
+  --cookie-bg-category: #f8fafc;
+  --cookie-bg-backdrop: rgba(0, 0, 0, 0.5);
+  
+  --cookie-border-banner: #e2e8f0;
+  --cookie-border-modal: #e2e8f0;
+  --cookie-border-input: #cbd5e1;
+  
+  --cookie-text-primary: #0f172a;
+  --cookie-text-secondary: #475569;
+  --cookie-text-muted: #64748b;
+  
+  --cookie-btn-primary-bg: #3b82f6;
+  --cookie-btn-primary-bg-hover: #2563eb;
+  --cookie-btn-primary-text: #ffffff;
+  
+  --cookie-btn-secondary-bg: transparent;
+  --cookie-btn-secondary-bg-hover: #f1f5f9;
+  --cookie-btn-secondary-text: #475569;
+  --cookie-btn-secondary-text-hover: #0f172a;
+  --cookie-btn-secondary-border: #cbd5e1;
+  --cookie-btn-secondary-border-hover: #94a3b8;
+  
+  --cookie-toggle-bg: #cbd5e1;
+  --cookie-toggle-bg-checked: #3b82f6;
+  --cookie-toggle-slider: #ffffff;
+  
+  --cookie-badge-success-bg: #10b981;
+  --cookie-badge-success-text: #ffffff;
+}
+
+/* ============================================
+   BANNER STYLES
+   ============================================ */
+
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--cookie-banner-z-index);
+  background-color: var(--cookie-bg-banner);
+  border-top: 1px solid var(--cookie-border-banner);
+  box-shadow: var(--cookie-shadow-xl);
+}
+
+.cookie-consent-banner-content {
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: var(--cookie-spacing-lg) var(--cookie-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cookie-spacing-md);
+}
+
+@media (min-width: 768px) {
+  .cookie-consent-banner-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--cookie-spacing-lg) var(--cookie-spacing-xl);
+  }
+}
+
+.cookie-consent-banner-text {
+  flex: 1;
+}
+
+.cookie-consent-title {
+  font-size: var(--cookie-font-size-lg);
+  font-weight: var(--cookie-font-weight-bold);
+  color: var(--cookie-text-primary);
+  margin: 0 0 var(--cookie-spacing-sm) 0;
+}
+
+.cookie-consent-description {
+  font-size: var(--cookie-font-size-sm);
+  color: var(--cookie-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cookie-consent-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cookie-spacing-sm);
+}
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+
+.cookie-consent-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--cookie-banner-z-index) + 10);
+  background-color: var(--cookie-bg-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--cookie-spacing-md);
+  animation: fadeIn var(--cookie-transition-normal);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cookie-consent-modal {
+  background-color: var(--cookie-bg-modal);
+  border-radius: var(--cookie-border-radius-lg);
+  box-shadow: var(--cookie-shadow-xl);
+  width: 100%;
+  max-width: 42rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp var(--cookie-transition-normal);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cookie-consent-modal-header {
+  padding: var(--cookie-spacing-lg);
+  border-bottom: 1px solid var(--cookie-border-modal);
+}
+
+.cookie-consent-modal-title {
+  font-size: var(--cookie-font-size-xl);
+  font-weight: var(--cookie-font-weight-bold);
+  color: var(--cookie-text-primary);
+  margin: 0 0 var(--cookie-spacing-sm) 0;
+}
+
+.cookie-consent-modal-subtitle {
+  font-size: var(--cookie-font-size-sm);
+  color: var(--cookie-text-muted);
+  margin: 0;
+}
+
+.cookie-consent-modal-body {
+  padding: var(--cookie-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cookie-spacing-lg);
+}
+
+.cookie-consent-modal-footer {
+  display: flex;
+  gap: var(--cookie-spacing-sm);
+  padding-top: var(--cookie-spacing-md);
+}
+
+/* ============================================
+   COOKIE CATEGORY STYLES
+   ============================================ */
+
+.cookie-consent-category {
+  background-color: var(--cookie-bg-category);
+  padding: var(--cookie-spacing-md);
+  border-radius: var(--cookie-border-radius-md);
+}
+
+.cookie-consent-category-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--cookie-spacing-md);
+}
+
+.cookie-consent-category-info {
+  flex: 1;
+}
+
+.cookie-consent-category-title {
+  font-size: var(--cookie-font-size-lg);
+  font-weight: var(--cookie-font-weight-semibold);
+  color: var(--cookie-text-primary);
+  margin: 0 0 var(--cookie-spacing-sm) 0;
+}
+
+.cookie-consent-category-description {
+  font-size: var(--cookie-font-size-sm);
+  color: var(--cookie-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 var(--cookie-spacing-xs) 0;
+}
+
+.cookie-consent-category-details {
+  font-size: var(--cookie-font-size-xs);
+  color: var(--cookie-text-muted);
+  margin: 0;
+}
+
+.cookie-consent-category-toggle {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+.cookie-consent-btn {
+  padding: var(--cookie-spacing-sm) var(--cookie-spacing-md);
+  font-size: var(--cookie-font-size-sm);
+  font-weight: var(--cookie-font-weight-semibold);
+  border-radius: var(--cookie-border-radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--cookie-transition-fast);
+  white-space: nowrap;
+}
+
+.cookie-consent-btn:focus {
+  outline: 2px solid var(--cookie-btn-primary-bg);
+  outline-offset: 2px;
+}
+
+.cookie-consent-btn-primary {
+  background-color: var(--cookie-btn-primary-bg);
+  color: var(--cookie-btn-primary-text);
+}
+
+.cookie-consent-btn-primary:hover {
+  background-color: var(--cookie-btn-primary-bg-hover);
+}
+
+.cookie-consent-btn-secondary {
+  background-color: var(--cookie-btn-secondary-bg);
+  color: var(--cookie-btn-secondary-text);
+  border: 1px solid var(--cookie-btn-secondary-border);
+}
+
+.cookie-consent-btn-secondary:hover {
+  background-color: var(--cookie-btn-secondary-bg-hover);
+  color: var(--cookie-btn-secondary-text-hover);
+  border-color: var(--cookie-btn-secondary-border-hover);
+}
+
+.cookie-consent-btn-flex {
+  flex: 1;
+  padding: var(--cookie-spacing-sm) var(--cookie-spacing-md);
+}
+
+@media (min-width: 640px) {
+  .cookie-consent-btn-flex {
+    padding: 0.75rem var(--cookie-spacing-md);
+  }
+}
+
+/* ============================================
+   TOGGLE SWITCH STYLES
+   ============================================ */
+
+.cookie-consent-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cookie-consent-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.cookie-consent-toggle-slider {
+  position: relative;
+  display: block;
+  width: 2.75rem;
+  height: 1.5rem;
+  background-color: var(--cookie-toggle-bg);
+  border-radius: var(--cookie-border-radius-full);
+  transition: background-color var(--cookie-transition-fast);
+}
+
+.cookie-consent-toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--cookie-toggle-slider);
+  border-radius: var(--cookie-border-radius-full);
+  transition: transform var(--cookie-transition-fast);
+}
+
+.cookie-consent-toggle-input:checked + .cookie-consent-toggle-slider {
+  background-color: var(--cookie-toggle-bg-checked);
+}
+
+.cookie-consent-toggle-input:checked + .cookie-consent-toggle-slider::after {
+  transform: translateX(1.25rem);
+}
+
+.cookie-consent-toggle-input:focus + .cookie-consent-toggle-slider {
+  outline: 2px solid var(--cookie-btn-primary-bg);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   BADGE STYLES
+   ============================================ */
+
+.cookie-consent-badge {
+  display: inline-block;
+  padding: var(--cookie-spacing-xs) 0.75rem;
+  font-size: var(--cookie-font-size-xs);
+  font-weight: var(--cookie-font-weight-semibold);
+  border-radius: var(--cookie-border-radius-full);
+}
+
+.cookie-consent-badge-success {
+  background-color: var(--cookie-badge-success-bg);
+  color: var(--cookie-badge-success-text);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.cookie-consent-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .cookie-consent-banner-actions {
+    width: 100%;
+  }
+  
+  .cookie-consent-btn {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .cookie-consent-modal {
+    margin: var(--cookie-spacing-sm);
+  }
+  
+  .cookie-consent-category-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .cookie-consent-category-toggle {
+    align-self: flex-end;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .cookie-consent-banner,
+  .cookie-consent-modal-backdrop {
+    display: none !important;
+  }
+}
