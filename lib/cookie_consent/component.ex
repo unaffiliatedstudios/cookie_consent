@@ -16,6 +16,7 @@ defmodule CookieConsent.Component do
       />
   """
   use Phoenix.LiveComponent
+  import Phoenix.LiveView.JS
 
   @impl true
   def mount(socket) do
