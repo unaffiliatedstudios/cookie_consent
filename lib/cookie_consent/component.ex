@@ -16,7 +16,6 @@ defmodule CookieConsent.Component do
       />
   """
   use Phoenix.LiveComponent
-  import Phoenix.LiveView.JS
 
   @impl true
   def mount(socket) do
@@ -162,7 +161,6 @@ defmodule CookieConsent.Component do
       >
         <div
           class="cookie-consent-modal"
-          phx-click={JS.stop_propagation()}
         >
           <div class="cookie-consent-modal-header">
             <h2 id="cookie-preferences-title" class="cookie-consent-modal-title">
