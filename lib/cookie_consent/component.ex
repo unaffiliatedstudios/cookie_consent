@@ -22,7 +22,9 @@ defmodule CookieConsent.Component do
     {:ok,
      socket
      |> assign(:show_banner, true)
-     |> assign(:show_preferences, false)}
+     |> assign(:show_preferences, false)
+     |> assign(:analytics_enabled, false)
+     |> assign(:marketing_enabled, false)}
   end
 
   @impl true
@@ -37,7 +39,9 @@ defmodule CookieConsent.Component do
      |> assign(assigns)
      |> assign(:ga_id, ga_id)
      |> assign(:meta_pixel_id, meta_pixel_id)
-     |> assign(:theme, theme)}
+     |> assign(:theme, theme)
+     |> assign_new(:analytics_enabled, fn -> false end)
+     |> assign_new(:marketing_enabled, fn -> false end)}
   end
 
   @impl true
@@ -45,6 +49,8 @@ defmodule CookieConsent.Component do
     {:noreply,
      socket
      |> assign(:show_banner, false)
+     |> assign(:analytics_enabled, true)
+     |> assign(:marketing_enabled, true)
      |> push_event("cookie-consent", %{
        analytics: true,
        marketing: true
@@ -57,6 +63,8 @@ defmodule CookieConsent.Component do
      socket
      |> assign(:show_banner, false)
      |> assign(:show_preferences, false)
+     |> assign(:analytics_enabled, false)
+     |> assign(:marketing_enabled, false)
      |> push_event("cookie-consent", %{
        analytics: false,
        marketing: false
@@ -69,9 +77,36 @@ defmodule CookieConsent.Component do
   end
 
   @impl true
-  def handle_event("save_preferences", params, socket) do
-    analytics = params["analytics"] == "true"
-    marketing = params["marketing"] == "true"
+  def handle_event("toggle_preference", params, socket) do
+    # 1. Determine which toggle was clicked from the "_target" in the params
+    # It comes as an array, e.g., ["analytics"] or ["marketing"]
+    [type | _rest] = params["_target"]
+
+    # 2. Check the value for that field (Phoenix sends "on" if checked, or omits it if unchecked)
+    # The presence of "on" means the checkbox is now checked (enabled).
+    is_enabled = Map.get(params, type) == "on"
+
+    # 3. Use the extracted 'type' and 'is_enabled' to update the socket
+    new_socket =
+      case type do
+        "analytics" ->
+          assign(socket, :analytics_enabled, is_enabled)
+
+        "marketing" ->
+          assign(socket, :marketing_enabled, is_enabled)
+
+        _ ->
+          socket
+      end
+
+    # The key here is to use the state sent by the checkbox in the form context.
+    {:noreply, new_socket}
+  end
+
+  @impl true
+  def handle_event("save_preferences", _params, socket) do
+    analytics = socket.assigns.analytics_enabled
+    marketing = socket.assigns.marketing_enabled
 
     {:noreply,
      socket
@@ -86,6 +121,14 @@ defmodule CookieConsent.Component do
   @impl true
   def handle_event("close_preferences", _params, socket) do
     {:noreply, assign(socket, :show_preferences, false)}
+  end
+
+  @impl true
+  def handle_event("noop", _params, socket) do
+    # This event is intentional on the modal body to prevent the backdrop's
+    # phx-click="close_preferences" from firing when clicking inside the modal.
+    # We just need to acknowledge it and do nothing.
+    {:noreply, socket}
   end
 
   @impl true
@@ -161,6 +204,9 @@ defmodule CookieConsent.Component do
       >
         <div
           class="cookie-consent-modal"
+          phx-click-away="close_preferences"
+          phx-target={@myself}
+          phx-click="noop"
         >
           <div class="cookie-consent-modal-header">
             <h2 id="cookie-preferences-title" class="cookie-consent-modal-title">
@@ -206,8 +252,12 @@ defmodule CookieConsent.Component do
                     <input
                       type="checkbox"
                       name="analytics"
-                      value="true"
+                      phx-change="toggle_preference"
+                      phx-value-type="analytics"
                       class="cookie-consent-toggle-input"
+                      phx-stop="click"
+                      checked={@analytics_enabled}
+                      phx-value-enabled={to_string(@analytics_enabled)}
                     />
                     <span class="cookie-consent-toggle-slider"></span>
                   </label>
@@ -232,8 +282,12 @@ defmodule CookieConsent.Component do
                     <input
                       type="checkbox"
                       name="marketing"
-                      value="true"
+                      phx-change="toggle_preference"
+                      phx-value-type="marketing"
                       class="cookie-consent-toggle-input"
+                      phx-stop="click"
+                      checked={@marketing_enabled}
+                      phx-value-enabled={to_string(@marketing_enabled)}
                     />
                     <span class="cookie-consent-toggle-slider"></span>
                   </label>
