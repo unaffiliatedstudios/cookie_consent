@@ -8,7 +8,7 @@ defmodule CookieConsent.MixProject do
     [
       app: :cookie_consent,
       version: @version,
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
@@ -30,7 +30,10 @@ defmodule CookieConsent.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:ex_doc, "~> 0.20", only: :dev, runtime: false},
+      {:floki, ">= 0.30.0", only: :test},
+      {:gettext, "~> 0.24"},
       {:jason, "~> 1.4"},
+      {:phoenix_html, "~> 4.1"},
       {:phoenix_live_view, "~> 0.18.16 or ~> 1.0"}
     ]
   end
