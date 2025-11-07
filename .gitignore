@@ -24,3 +24,6 @@ cookie_consent-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Tool versions file
+.tool-versions

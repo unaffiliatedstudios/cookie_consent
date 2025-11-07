@@ -7,27 +7,22 @@
 
 export const CookieConsent = {
   mounted() {
-    console.log("[CookieConsent] Mounted", this.el);
 
     this.gaId = this.el.dataset.gaId;
     this.metaPixelId = this.el.dataset.metaPixelId;
 
     // Check if user has already made a choice
     const consent = this.getConsent();
-    console.log("[CookieConsent] Existing consent:", consent);
 
     if (consent) {
       // User already consented, load scripts immediately
-      console.log("[CookieConsent] Loading scripts from stored consent");
       this.loadScripts(consent);
       // Banner visibility is controlled by LiveView based on consent check
     } else {
-      console.log("[CookieConsent] No consent found, banner will be visible");
     }
 
     // Listen for consent events from LiveView
     this.handleEvent("cookie-consent", (data) => {
-      console.log("[CookieConsent] Received consent event:", data);
       const consent = {
         analytics: data.analytics,
         marketing: data.marketing,
@@ -48,7 +43,6 @@ export const CookieConsent = {
   saveConsent(consent) {
     localStorage.setItem("cookie_consent", JSON.stringify(consent));
     localStorage.setItem("cookie_consent_date", new Date().toISOString());
-    console.log("[CookieConsent] Consent saved:", consent);
   },
 
   loadScripts(consent) {
