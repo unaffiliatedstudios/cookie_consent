@@ -1,4 +1,7 @@
 defmodule CookieConsent.MixProject do
+  @moduledoc """
+  Mix project configuration for the CookieConsent library.
+  """
   use Mix.Project
 
   @version "1.0.1"
