@@ -10,6 +10,7 @@ export const CookieConsent = {
 
     this.gaId = this.el.dataset.gaId;
     this.metaPixelId = this.el.dataset.metaPixelId;
+    this.cspNonce = this.el.dataset.cspNonce;
     this.hideBanner();
 
     // Check if user has already made a choice
@@ -69,6 +70,7 @@ export const CookieConsent = {
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${this.gaId}`;
+    script.nonce = this.cspNonce || "";
     document.head.appendChild(script);
 
     // Initialize gtag
@@ -110,6 +112,7 @@ export const CookieConsent = {
       t = b.createElement(e);
       t.async = !0;
       t.src = v;
+      t.nonce = this.cspNonce || "";
       s = b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t, s);
     })(
