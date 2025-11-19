@@ -29,12 +29,14 @@ defmodule CookieConsent.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.20", only: :dev, runtime: false},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.24"},
       {:jason, "~> 1.4"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_view, "~> 0.18.16 or ~> 1.0"}
+      {:phoenix_live_view, "~> 0.18.16 or ~> 1.0"},
+      {:sobelow, "~> 0.14", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -48,7 +50,7 @@ defmodule CookieConsent.MixProject do
   defp package do
     [
       name: "cookie_consent",
-      files: ~w(lib priv .formatter.exs mix.exs README.md LICENSE),
+      files: ~w(lib assets .formatter.exs mix.exs README.md LICENSE),
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url

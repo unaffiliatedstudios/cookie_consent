@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2025-11-19
+### Fixed
+- Fixed banner staying on page by hiding banner by default and showing only when needed
+- Corrected CSS selector from `.cookie-consent-banner .cookie-consent-visible` to `.cookie-consent-visible .cookie-consent-banner`
+- Improved asset pipeline integration for consuming Phoenix applications
+
+### Added
+- `CookieConsent.RouterIntegration` module for easy router pipeline integration
+- `CookieConsent.PlugSessionMirror` plug to mirror cookie consent data from cookies to session
+- Server-side consent state access for LiveView components and controllers
+- Enhanced documentation for server-side integration patterns
+
+### Changed
+- Updated JavaScript hook to use `cookie-consent-visible` class pattern for better control
+- Improved CSS organization and banner visibility logic
+- Enhanced integration examples in documentation
+
 ## [1.0.1] - 2025-11-07
 
 ### Fixed
@@ -36,9 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Responsive mobile-friendly layout
 - Zero external dependencies (no Tailwind or other CSS frameworks required)
 - Phoenix LiveView hook for consent management
-- LocalStorage-based consent persistence
+- sessionStorage-based consent persistence
 - Auto z-index fixes for Phoenix LiveView topbar compatibility
 
 [Unreleased]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...HEAD
+[1.0.2]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/unaffiliatedstudios/cookie_consent/releases/tag/v1.0.0

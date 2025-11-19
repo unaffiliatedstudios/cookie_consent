@@ -10,7 +10,7 @@ A clean, accessible, and easily customizable cookie consent component for Phoeni
 - ✅ **Framework agnostic styling** - No Tailwind dependency, works with any app
 - ✅ **Accessible** - Proper ARIA labels and keyboard navigation
 - ✅ **Responsive** - Mobile-friendly design
-- ✅ **LocalStorage persistence** - Remembers user preferences
+- ✅ **sessionStorage persistence** - Remembers user preferences
 - ✅ **Script loading** - Conditionally loads Google Analytics and Meta Pixel
 
 ## 📦 Installation
@@ -253,13 +253,13 @@ loadCustomAnalytics() {
 
 ## 🔍 How It Works
 
-1. **On Mount**: JS hook checks `localStorage` for existing consent
+1. **On Mount**: JS hook checks `sessionStorage` for existing consent
 2. **No Consent**: Banner appears at bottom of screen
 3. **User Chooses**: 
    - "Accept All" → Both cookies enabled
    - "Reject All" → Both cookies disabled
    - "Customize" → Modal opens with individual toggles
-4. **Save**: Preference saved to `localStorage` and scripts loaded
+4. **Save**: Preference saved to `sessionStorage` and scripts loaded
 5. **Next Visit**: No banner shown, scripts load automatically based on saved preference
 
 ## 🐛 Troubleshooting
@@ -279,7 +279,7 @@ Make sure `phx-hook="CookieConsent"` is on the wrapper div.
 Check that:
 1. `data-ga-id` and `data-meta-pixel-id` attributes are set
 2. Console shows: `[CookieConsent] Google Analytics loaded`
-3. LocalStorage has `cookie_consent` key with proper JSON
+3. sessionStorage has `cookie_consent` key with proper JSON
 
 ### Styling conflicts?
 
@@ -305,4 +305,4 @@ Suggestions and improvements welcome! Key areas:
 
 ---
 
-**Note**: This component stores preferences in `localStorage`, which is browser-specific. Users clearing browser data will see the banner again. For cross-device persistence, you'd need to store preferences server-side with user accounts.
+**Note**: This component stores preferences in `sessionStorage`, which is browser-specific. Users clearing browser data will see the banner again. For cross-device persistence, you'd need to store preferences server-side with user accounts.
