@@ -10,6 +10,7 @@ export const CookieConsent = {
 
     this.gaId = this.el.dataset.gaId;
     this.metaPixelId = this.el.dataset.metaPixelId;
+    this.hideBanner();
 
     // Check if user has already made a choice
     const consent = this.getConsent();
@@ -17,8 +18,8 @@ export const CookieConsent = {
     if (consent) {
       // User already consented, load scripts immediately
       this.loadScripts(consent);
-      // Banner visibility is controlled by LiveView based on consent check
     } else {
+      this.showBanner();
     }
 
     // Listen for consent events from LiveView
@@ -29,6 +30,7 @@ export const CookieConsent = {
       };
       this.saveConsent(consent);
       this.loadScripts(consent);
+      this.hideBanner();
     });
 
     // Expose method to check consent (for parent apps)
@@ -36,13 +38,19 @@ export const CookieConsent = {
   },
 
   getConsent() {
-    const stored = localStorage.getItem("cookie_consent");
+    const stored = sessionStorage.getItem("cookie_consent");
     return stored ? JSON.parse(stored) : null;
   },
 
   saveConsent(consent) {
-    localStorage.setItem("cookie_consent", JSON.stringify(consent));
-    localStorage.setItem("cookie_consent_date", new Date().toISOString());
+    sessionStorage.setItem("cookie_consent", JSON.stringify(consent));
+    sessionStorage.setItem("cookie_consent_date", new Date().toISOString());
+  },
+  showBanner() {
+    this.el.classList.add("cookie-consent-visible");
+  },
+  hideBanner() {
+    this.el.classList.remove("cookie-consent-visible");
   },
 
   loadScripts(consent) {
@@ -56,8 +64,7 @@ export const CookieConsent = {
   },
 
   loadGoogleAnalytics() {
-    console.log("[CookieConsent] Loading Google Analytics:", this.gaId);
-    
+    console.log("[CookieConsent] Loading Google Analytics");
     // Load gtag.js
     const script = document.createElement("script");
     script.async = true;
@@ -86,7 +93,7 @@ export const CookieConsent = {
   },
 
   loadMetaPixel() {
-    console.log("[CookieConsent] Loading Meta Pixel:", this.metaPixelId);
+    console.log("[CookieConsent] Loading Meta Pixel");
 
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;

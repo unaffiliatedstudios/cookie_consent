@@ -27,3 +27,15 @@ cookie_consent-*.tar
 
 # Tool versions file
 .tool-versions
+
+# Node modules
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+
+# Assets build output
+/priv/static/assets/
+/priv/static/css/
+/priv/static/js/
+/priv/static/images/
+/priv/static/fonts/

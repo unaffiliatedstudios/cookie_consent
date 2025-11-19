@@ -21,7 +21,6 @@ defmodule CookieConsent.Component do
   def mount(socket) do
     {:ok,
      socket
-     |> assign(:show_banner, true)
      |> assign(:show_preferences, false)
      |> assign(:analytics_enabled, false)
      |> assign(:marketing_enabled, false)}
@@ -48,7 +47,6 @@ defmodule CookieConsent.Component do
   def handle_event("accept_all", _params, socket) do
     {:noreply,
      socket
-     |> assign(:show_banner, false)
      |> assign(:analytics_enabled, true)
      |> assign(:marketing_enabled, true)
      |> push_event("cookie-consent", %{
@@ -61,7 +59,6 @@ defmodule CookieConsent.Component do
   def handle_event("reject_all", _params, socket) do
     {:noreply,
      socket
-     |> assign(:show_banner, false)
      |> assign(:show_preferences, false)
      |> assign(:analytics_enabled, false)
      |> assign(:marketing_enabled, false)
@@ -110,7 +107,6 @@ defmodule CookieConsent.Component do
 
     {:noreply,
      socket
-     |> assign(:show_banner, false)
      |> assign(:show_preferences, false)
      |> push_event("cookie-consent", %{
        analytics: analytics,
@@ -143,7 +139,8 @@ defmodule CookieConsent.Component do
     >
       <!-- Main Banner -->
       <div
-        :if={@show_banner && !@show_preferences}
+        :if={!@show_preferences}
+        id="cookie-consent-banner"
         class="cookie-consent-banner"
         role="dialog"
         aria-labelledby="cookie-consent-title"
