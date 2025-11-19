@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2025-11-19
+
+### Added
+- CSP (Content Security Policy) nonce support for strict security compliance
+- New optional `csp_nonce` parameter for LiveComponent integration
+- Automatic nonce application to dynamically loaded tracking scripts (Google Analytics and Meta Pixel)
+
+### Security
+- Enhanced Content Security Policy compatibility for production deployments
+- Prevents CSP violations when loading tracking scripts after user consent
+
+### Changed
+- JavaScript hook now accepts and applies CSP nonces to dynamically created script elements
+- Updated component to accept optional `csp_nonce` assign for security-conscious applications
+
+### Technical Notes
+- Backward compatible: `csp_nonce` parameter is optional and defaults to empty string
+- No breaking changes for existing implementations
+
 ## [1.0.2] - 2025-11-19
 ### Fixed
 - Fixed banner staying on page by hiding banner by default and showing only when needed
@@ -57,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auto z-index fixes for Phoenix LiveView topbar compatibility
 
 [Unreleased]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...HEAD
+[1.0.3]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.3...v1.0.2
 [1.0.2]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/unaffiliatedstudios/cookie_consent/releases/tag/v1.0.0

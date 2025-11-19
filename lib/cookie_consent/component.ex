@@ -39,6 +39,7 @@ defmodule CookieConsent.Component do
      |> assign(:ga_id, ga_id)
      |> assign(:meta_pixel_id, meta_pixel_id)
      |> assign(:theme, theme)
+     |> assign(:csp_nonce, assigns[:csp_nonce])
      |> assign_new(:analytics_enabled, fn -> false end)
      |> assign_new(:marketing_enabled, fn -> false end)}
   end
@@ -135,6 +136,7 @@ defmodule CookieConsent.Component do
       phx-hook="CookieConsent"
       data-ga-id={@ga_id}
       data-meta-pixel-id={@meta_pixel_id}
+      data-csp-nonce={@csp_nonce}
       class={"cookie-consent-theme-#{@theme}"}
     >
       <!-- Main Banner -->
