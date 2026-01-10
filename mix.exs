@@ -4,7 +4,7 @@ defmodule CookieConsent.MixProject do
   """
   use Mix.Project
 
-  @version "1.0.1"
+  @version "1.0.4"
   @source_url "https://github.com/unaffiliatedstudios/cookie_consent"
 
   def project do

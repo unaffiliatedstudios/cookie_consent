@@ -32,6 +32,42 @@ defmodule CookieConsent.Component do
     ga_id = assigns[:ga_id] || CookieConsent.ga_id()
     meta_pixel_id = assigns[:meta_pixel_id] || CookieConsent.meta_pixel_id()
     theme = assigns[:theme] || CookieConsent.theme()
+    debug = assigns[:debug] || false
+
+    # Customizable text strings for i18n support
+    text = %{
+      banner_title: assigns[:banner_title] || "We Use Cookies",
+      banner_description:
+        assigns[:banner_description] ||
+          "We use cookies to analyze site traffic and improve your experience. You can customize your preferences or accept all cookies.",
+      btn_reject_all: assigns[:btn_reject_all] || "Reject All",
+      btn_customize: assigns[:btn_customize] || "Customize",
+      btn_accept_all: assigns[:btn_accept_all] || "Accept All",
+      modal_title: assigns[:modal_title] || "Cookie Preferences",
+      modal_subtitle:
+        assigns[:modal_subtitle] ||
+          "Choose which cookies you want to allow. You can change these settings at any time.",
+      btn_save: assigns[:btn_save] || "Save Preferences",
+      essential_title: assigns[:essential_title] || "Essential Cookies",
+      essential_description:
+        assigns[:essential_description] ||
+          "Required for the website to function properly. These cannot be disabled.",
+      analytics_title: assigns[:analytics_title] || "Analytics Cookies",
+      analytics_description:
+        assigns[:analytics_description] ||
+          "Help us understand how visitors use our site (Google Analytics).",
+      analytics_details:
+        assigns[:analytics_details] ||
+          "Collects anonymous data about page views, session duration, and user behavior.",
+      marketing_title: assigns[:marketing_title] || "Marketing Cookies",
+      marketing_description:
+        assigns[:marketing_description] ||
+          "Used to track visitors across websites for advertising purposes (Meta Pixel).",
+      marketing_details:
+        assigns[:marketing_details] ||
+          "Helps us show relevant ads and measure campaign effectiveness.",
+      always_on: assigns[:always_on] || "Always On"
+    }
 
     {:ok,
      socket
@@ -39,6 +75,8 @@ defmodule CookieConsent.Component do
      |> assign(:ga_id, ga_id)
      |> assign(:meta_pixel_id, meta_pixel_id)
      |> assign(:theme, theme)
+     |> assign(:debug, debug)
+     |> assign(:text, text)
      |> assign(:csp_nonce, assigns[:csp_nonce])
      |> assign_new(:analytics_enabled, fn -> false end)
      |> assign_new(:marketing_enabled, fn -> false end)}
@@ -137,6 +175,7 @@ defmodule CookieConsent.Component do
       data-ga-id={@ga_id}
       data-meta-pixel-id={@meta_pixel_id}
       data-csp-nonce={@csp_nonce}
+      data-debug={@debug}
       class={"cookie-consent-theme-#{@theme}"}
     >
       <!-- Main Banner -->
@@ -151,11 +190,10 @@ defmodule CookieConsent.Component do
         <div class="cookie-consent-banner-content">
           <div class="cookie-consent-banner-text">
             <h3 id="cookie-consent-title" class="cookie-consent-title">
-              We Use Cookies
+              <%= @text.banner_title %>
             </h3>
             <p id="cookie-consent-description" class="cookie-consent-description">
-              We use cookies to analyze site traffic and improve your experience.
-              You can customize your preferences or accept all cookies.
+              <%= @text.banner_description %>
             </p>
           </div>
 
@@ -167,7 +205,7 @@ defmodule CookieConsent.Component do
               class="cookie-consent-btn cookie-consent-btn-secondary"
               aria-label="Reject all cookies"
             >
-              Reject All
+              <%= @text.btn_reject_all %>
             </button>
             <button
               type="button"
@@ -176,7 +214,7 @@ defmodule CookieConsent.Component do
               class="cookie-consent-btn cookie-consent-btn-secondary"
               aria-label="Customize cookie preferences"
             >
-              Customize
+              <%= @text.btn_customize %>
             </button>
             <button
               type="button"
@@ -185,7 +223,7 @@ defmodule CookieConsent.Component do
               class="cookie-consent-btn cookie-consent-btn-primary"
               aria-label="Accept all cookies"
             >
-              Accept All
+              <%= @text.btn_accept_all %>
             </button>
           </div>
         </div>
@@ -209,10 +247,10 @@ defmodule CookieConsent.Component do
         >
           <div class="cookie-consent-modal-header">
             <h2 id="cookie-preferences-title" class="cookie-consent-modal-title">
-              Cookie Preferences
+              <%= @text.modal_title %>
             </h2>
             <p class="cookie-consent-modal-subtitle">
-              Choose which cookies you want to allow. You can change these settings at any time.
+              <%= @text.modal_subtitle %>
             </p>
           </div>
 
@@ -221,14 +259,14 @@ defmodule CookieConsent.Component do
             <div class="cookie-consent-category">
               <div class="cookie-consent-category-content">
                 <div class="cookie-consent-category-info">
-                  <h3 class="cookie-consent-category-title">Essential Cookies</h3>
+                  <h3 class="cookie-consent-category-title"><%= @text.essential_title %></h3>
                   <p class="cookie-consent-category-description">
-                    Required for the website to function properly. These cannot be disabled.
+                    <%= @text.essential_description %>
                   </p>
                 </div>
                 <div class="cookie-consent-category-toggle">
                   <span class="cookie-consent-badge cookie-consent-badge-success">
-                    Always On
+                    <%= @text.always_on %>
                   </span>
                 </div>
               </div>
@@ -238,12 +276,12 @@ defmodule CookieConsent.Component do
             <div class="cookie-consent-category">
               <div class="cookie-consent-category-content">
                 <div class="cookie-consent-category-info">
-                  <h3 class="cookie-consent-category-title">Analytics Cookies</h3>
+                  <h3 class="cookie-consent-category-title"><%= @text.analytics_title %></h3>
                   <p class="cookie-consent-category-description">
-                    Help us understand how visitors use our site (Google Analytics).
+                    <%= @text.analytics_description %>
                   </p>
                   <p class="cookie-consent-category-details">
-                    Collects anonymous data about page views, session duration, and user behavior.
+                    <%= @text.analytics_details %>
                   </p>
                 </div>
                 <div class="cookie-consent-category-toggle">
@@ -268,12 +306,12 @@ defmodule CookieConsent.Component do
             <div class="cookie-consent-category">
               <div class="cookie-consent-category-content">
                 <div class="cookie-consent-category-info">
-                  <h3 class="cookie-consent-category-title">Marketing Cookies</h3>
+                  <h3 class="cookie-consent-category-title"><%= @text.marketing_title %></h3>
                   <p class="cookie-consent-category-description">
-                    Used to track visitors across websites for advertising purposes (Meta Pixel).
+                    <%= @text.marketing_description %>
                   </p>
                   <p class="cookie-consent-category-details">
-                    Helps us show relevant ads and measure campaign effectiveness.
+                    <%= @text.marketing_details %>
                   </p>
                 </div>
                 <div class="cookie-consent-category-toggle">
@@ -302,14 +340,14 @@ defmodule CookieConsent.Component do
                 class="cookie-consent-btn cookie-consent-btn-secondary cookie-consent-btn-flex"
                 aria-label="Reject all cookies"
               >
-                Reject All
+                <%= @text.btn_reject_all %>
               </button>
               <button
                 type="submit"
                 class="cookie-consent-btn cookie-consent-btn-primary cookie-consent-btn-flex"
                 aria-label="Save cookie preferences"
               >
-                Save Preferences
+                <%= @text.btn_save %>
               </button>
             </div>
           </form>

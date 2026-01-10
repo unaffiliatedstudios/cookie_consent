@@ -7,10 +7,10 @@
 
 export const CookieConsent = {
   mounted() {
-
     this.gaId = this.el.dataset.gaId;
     this.metaPixelId = this.el.dataset.metaPixelId;
     this.cspNonce = this.el.dataset.cspNonce;
+    this.debug = this.el.dataset.debug === "true";
     this.hideBanner();
 
     // Check if user has already made a choice
@@ -39,13 +39,33 @@ export const CookieConsent = {
   },
 
   getConsent() {
-    const stored = sessionStorage.getItem("cookie_consent");
-    return stored ? JSON.parse(stored) : null;
+    try {
+      const stored = localStorage.getItem("cookie_consent");
+      return stored ? JSON.parse(stored) : null;
+    } catch (error) {
+      // If localStorage is unavailable or data is corrupted, clear it and return null
+      if (this.debug) {
+        console.error("[CookieConsent] Error reading consent data:", error);
+      }
+      try {
+        localStorage.removeItem("cookie_consent");
+      } catch (e) {
+        // Ignore errors when clearing
+      }
+      return null;
+    }
   },
 
   saveConsent(consent) {
-    sessionStorage.setItem("cookie_consent", JSON.stringify(consent));
-    sessionStorage.setItem("cookie_consent_date", new Date().toISOString());
+    try {
+      localStorage.setItem("cookie_consent", JSON.stringify(consent));
+      localStorage.setItem("cookie_consent_date", new Date().toISOString());
+    } catch (error) {
+      // Handle cases where localStorage might be disabled or full
+      if (this.debug) {
+        console.error("[CookieConsent] Error saving consent data:", error);
+      }
+    }
   },
   showBanner() {
     this.el.classList.add("cookie-consent-visible");
@@ -65,7 +85,9 @@ export const CookieConsent = {
   },
 
   loadGoogleAnalytics() {
-    console.log("[CookieConsent] Loading Google Analytics");
+    if (this.debug) {
+      console.log("[CookieConsent] Loading Google Analytics");
+    }
     // Load gtag.js
     const script = document.createElement("script");
     script.async = true;
@@ -86,16 +108,22 @@ export const CookieConsent = {
         cookie_flags: "SameSite=None;Secure",
       });
       window.GA_LOADED = true;
-      console.log("[CookieConsent] Google Analytics loaded successfully");
-    };
+      if (this.debug) {
+        console.log("[CookieConsent] Google Analytics loaded successfully");
+      }
+    }.bind(this);
 
     script.onerror = () => {
-      console.error("[CookieConsent] Failed to load Google Analytics");
-    };
+      if (this.debug) {
+        console.error("[CookieConsent] Failed to load Google Analytics");
+      }
+    }.bind(this);
   },
 
   loadMetaPixel() {
-    console.log("[CookieConsent] Loading Meta Pixel");
+    if (this.debug) {
+      console.log("[CookieConsent] Loading Meta Pixel");
+    }
 
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
@@ -125,6 +153,8 @@ export const CookieConsent = {
     fbq("init", this.metaPixelId);
     fbq("track", "PageView");
     window.META_LOADED = true;
-    console.log("[CookieConsent] Meta Pixel loaded successfully");
+    if (this.debug) {
+      console.log("[CookieConsent] Meta Pixel loaded successfully");
+    }
   },
 };
