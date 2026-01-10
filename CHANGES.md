@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-01-10
+
+### Added
+- **i18n/Translation Support**: All text strings can now be customized via component assigns
+  - 15+ text override parameters for complete localization (banner_title, btn_accept_all, etc.)
+  - Supports any language - pass translated strings as component assigns
+  - Maintains English defaults for backward compatibility
+- **Debug Mode**: Optional `debug={true}` parameter for development logging
+  - Console logs for consent read/write operations
+  - Script loading success/failure tracking
+  - localStorage error details
+- **Comprehensive Test Suite**: Added LiveView component tests
+  - Tests for all event handlers (accept_all, reject_all, toggle_preference, etc.)
+  - Theme and configuration testing
+  - Text customization testing
+- **Improved Error Handling**:
+  - JavaScript try-catch for JSON.parse operations
+  - Graceful fallback when localStorage is unavailable/corrupted
+  - Automatic cleanup of malformed consent data
+  - Logger.debug for Plug decode failures in PlugSessionMirror
+
+### Changed
+- **BREAKING (Minor)**: localStorage instead of sessionStorage for consent persistence
+  - Consent now persists across browser sessions (better UX)
+  - Users only see banner once per browser/device until they clear data
+  - Automatic migration - old sessionStorage data is ignored
+  - Users will see banner one additional time during transition
+- **Conditional Console Logging**: Production console.log statements now gated by debug flag
+  - Silent by default in production (cleaner console)
+  - Enable with `debug={true}` for development troubleshooting
+- **Enhanced Documentation**:
+  - Added CSP nonce configuration examples
+  - Documented all 15+ text override parameters with Spanish example
+  - Added comprehensive upgrade guide from v1.0.0-1.0.3
+  - Documented CSS topbar fix for Phoenix LiveView
+  - Updated installation instructions to use Hex package manager
+  - Added troubleshooting section for localStorage issues
+  - Updated module docs with correct import paths
+
+### Fixed
+- **Version Consistency**: Updated mix.exs version to match CHANGELOG
+- **Changelog Links**: Fixed incorrect version comparison URLs in footer
+- **Test Suite**: Replaced broken placeholder test with actual component tests
+- **Missing LICENSE**: Added MIT LICENSE file (was declared but file was missing)
+
+### Security
+- Improved localStorage error handling prevents potential exceptions
+- Better logging for debugging security-related issues
+- CSP nonce support ensures compliance with strict security policies
+
+### Documentation
+- Comprehensive README updates with all new features
+- API documentation improvements in module docs
+- Added MIT license file with proper copyright notice
+- Added Phoenix LiveView topbar z-index documentation
+
 ## [1.0.3] - 2025-11-19
 
 ### Added
@@ -75,8 +131,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - sessionStorage-based consent persistence
 - Auto z-index fixes for Phoenix LiveView topbar compatibility
 
-[Unreleased]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...HEAD
-[1.0.3]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.3...v1.0.2
+[Unreleased]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/unaffiliatedstudios/cookie_consent/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/unaffiliatedstudios/cookie_consent/releases/tag/v1.0.0

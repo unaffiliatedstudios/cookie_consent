@@ -8,9 +8,7 @@ defmodule CookieConsent do
 
       def deps do
         [
-          {:cookie_consent, path: "../cookie_consent"}
-          # or from GitHub:
-          # {:cookie_consent, github: "yourusername/cookie_consent"}
+          {:cookie_consent, "~> 1.0"}
         ]
       end
 
@@ -31,8 +29,7 @@ defmodule CookieConsent do
 
   In `assets/js/app.js`:
 
-      import { CookieConsent } from "../../../cookie_consent/priv/static/cookie_consent"
-      // Or if published to npm/hex: import { CookieConsent } from "cookie_consent"
+      import { CookieConsent } from "../../deps/cookie_consent/assets/js/CookieConsent.js"
 
       let Hooks = {}
       Hooks.CookieConsent = CookieConsent
